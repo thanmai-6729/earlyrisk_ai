@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Silent Disease Detection (SDD) - Upload Report</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom animations for the mock interaction */
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin-custom {
+            animation: spin 1s linear infinite;
+        }
+        
+        .toast-enter {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+        .toast-enter-active {
+            transform: translateY(0);
+            opacity: 1;
+            transition: all 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display min-h-screen flex flex-col items-center justify-center p-4">
+<!-- Main Container -->
+<div class="w-full max-w-[960px] bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col md:flex-row relative group/design-root">
+<!-- Left Side: Visual/Context -->
+<div class="relative w-full md:w-1/3 bg-slate-50 dark:bg-slate-900 border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-800 p-8 flex flex-col justify-center items-center text-center">
+<div class="mb-6 relative">
+<div class="absolute inset-0 bg-primary/20 blur-xl rounded-full"></div>
+<div class="relative bg-white dark:bg-slate-800 p-4 rounded-full shadow-md">
+<span class="material-symbols-outlined text-primary text-5xl">description</span>
+</div>
+</div>
+<h3 class="text-slate-900 dark:text-white text-xl font-bold mb-2">Upload a report</h3>
+<p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">
+                                Upload a PDF or image report. We’ll extract key values and re-run the analysis.
+            </p>
+</div>
+<!-- Right Side: Configuration & Action -->
+<div class="w-full md:w-2/3 p-8 flex flex-col">
+<div class="mb-6">
+<h2 class="text-[#111318] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] mb-1">Analyze Report & Export</h2>
+<p class="text-slate-500 dark:text-slate-400 text-sm">Signed in as <span id="sddReportUser" class="font-semibold">Loading…</span></p>
+<p class="text-slate-500 dark:text-slate-400 text-sm" id="sddReportStatus"></p>
+</div>
+
+<!-- Upload -->
+<div class="mb-6">
+    <label class="text-slate-700 dark:text-slate-200 text-sm font-semibold">Report file (PDF/image)</label>
+    <div class="mt-2 flex items-center gap-3">
+        <input id="sddReportFile" type="file" accept="application/pdf,image/*" class="block w-full text-sm text-slate-600 dark:text-slate-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 dark:file:bg-slate-800 dark:file:text-slate-200 dark:hover:file:bg-slate-700" />
+    </div>
+</div>
+
+<!-- Options Checklist -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+<label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
+<div class="relative flex items-center">
+<input checked="" class="peer h-5 w-5 rounded border-slate-300 dark:border-slate-600 text-primary focus:ring-primary/20 dark:bg-slate-800" type="checkbox"/>
+</div>
+<span class="text-slate-700 dark:text-slate-200 text-sm font-medium">Patient Profile Summary</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
+<div class="relative flex items-center">
+<input checked="" class="peer h-5 w-5 rounded border-slate-300 dark:border-slate-600 text-primary focus:ring-primary/20 dark:bg-slate-800" type="checkbox"/>
+</div>
+<span class="text-slate-700 dark:text-slate-200 text-sm font-medium">Risk Scores &amp; Charts</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
+<div class="relative flex items-center">
+<input checked="" class="peer h-5 w-5 rounded border-slate-300 dark:border-slate-600 text-primary focus:ring-primary/20 dark:bg-slate-800" type="checkbox"/>
+</div>
+<span class="text-slate-700 dark:text-slate-200 text-sm font-medium">Top 5 Explainability Factors</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer transition-colors border border-transparent hover:border-slate-200 dark:hover:border-slate-700">
+<div class="relative flex items-center">
+<input checked="" class="peer h-5 w-5 rounded border-slate-300 dark:border-slate-600 text-primary focus:ring-primary/20 dark:bg-slate-800" type="checkbox"/>
+</div>
+<span class="text-slate-700 dark:text-slate-200 text-sm font-medium">Recommended Action Plan</span>
+</label>
+</div>
+
+<!-- Results -->
+<div class="mb-8 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 p-4">
+    <h3 class="text-slate-900 dark:text-white text-sm font-bold mb-2">Detected Values</h3>
+    <ul id="sddDetectedList" class="text-xs text-slate-600 dark:text-slate-300 space-y-1"></ul>
+    <p id="sddAnalysisSummary" class="text-xs text-slate-500 dark:text-slate-400 mt-3"></p>
+</div>
+
+<!-- Action Area -->
+<div class="mt-auto border-t border-slate-100 dark:border-slate-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+<div class="text-xs text-slate-400 dark:text-slate-500 text-center sm:text-left">
+<p>Generated on <span id="current-date">Oct 24, 2023</span></p>
+<p>via SDD Backend</p>
+</div>
+<button class="group relative flex min-w-[240px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary hover:bg-blue-700 text-white transition-all shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-70 disabled:cursor-not-allowed" id="downloadBtn">
+<div class="flex items-center gap-2" id="btnContent">
+<span class="material-symbols-outlined text-xl group-hover:scale-110 transition-transform">picture_as_pdf</span>
+<span class="text-sm font-bold tracking-wide">ANALYZE &amp; DOWNLOAD</span>
+</div>
+<!-- Loading Spinner (Hidden by default) -->
+<div class="hidden absolute inset-0 flex items-center justify-center bg-primary" id="btnLoader">
+<span class="material-symbols-outlined animate-spin-custom text-white">progress_activity</span>
+<span class="ml-2 text-sm font-semibold">Analyzing...</span>
+</div>
+</button>
+</div>
+</div>
+</div>
+<!-- Success Toast (Hidden by default) -->
+<div class="fixed bottom-6 right-6 translate-y-24 opacity-0 transition-all duration-500 ease-out z-50" id="successToast">
+<div class="bg-white dark:bg-slate-800 border-l-4 border-green-500 shadow-xl rounded-md p-4 flex items-center gap-3 max-w-sm">
+<div class="bg-green-100 dark:bg-green-900/30 p-1.5 rounded-full shrink-0">
+<span class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-slate-900 dark:text-white">Report Downloaded</h4>
+<p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">The patient analysis PDF has been saved successfully.</p>
+</div>
+<button class="ml-auto text-slate-400 hover:text-slate-600 dark:hover:text-slate-300" onclick="closeToast()">
+<span class="material-symbols-outlined text-sm">close</span>
+</button>
+</div>
+</div>
+<script>
+  function closeToast() {
+    const toast = document.getElementById('successToast');
+    toast.classList.add('translate-y-24', 'opacity-0');
+  }
+</script>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="env.js"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script src="sdd-portal.js"></script>
+<script src="dashboard5-app.js"></script>
+
+</html>

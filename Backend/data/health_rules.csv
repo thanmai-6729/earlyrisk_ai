@@ -1,0 +1,21 @@
+disease,signal,condition,weight
+Diabetes,High fasting sugar,sugar_mgdl >= 126,3
+Diabetes,Prediabetes range,sugar_mgdl >= 100 and sugar_mgdl < 126,1
+Diabetes,High HbA1c,hba1c_pct >= 6.5,3
+Diabetes,Borderline HbA1c,hba1c_pct >= 5.7 and hba1c_pct < 6.5,1
+Diabetes,High BMI,bmi >= 30,2
+Diabetes,Family history,family_history == 1,1
+Heart Disease,High systolic BP,bp_systolic >= 140,2
+Heart Disease,High diastolic BP,bp_diastolic >= 90,2
+Heart Disease,High cholesterol,cholesterol_mgdl >= 240,2
+Heart Disease,Overweight,bmi >= 27,1
+Heart Disease,Low exercise,exercise_mins_per_week < 75,1
+Heart Disease,High stress,stress_level >= 7,1
+Fatty Liver,High BMI,bmi >= 30,2
+Fatty Liver,High cholesterol,cholesterol_mgdl >= 240,2
+Fatty Liver,High sugar,sugar_mgdl >= 110,1
+Fatty Liver,Low exercise,exercise_mins_per_week < 75,1
+Fatty Liver,Poor sleep,sleep_hours < 6,1
+Depression,High stress,stress_level >= 7,3
+Depression,Poor sleep,sleep_hours < 6,2
+Depression,Low exercise,exercise_mins_per_week < 60,1

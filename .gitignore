@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+*.pkl
+.env
+
+
+Frontend/silent disease/env.js
+supabase
+Reference
+

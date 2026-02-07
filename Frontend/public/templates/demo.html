@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Earlyrisk AI — Guest Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#2463eb",
+            "background-light": "#f6f6f8",
+            "background-dark": "#111621",
+            "surface-light": "#ffffff",
+            "surface-dark": "#1a202c",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display min-h-screen flex flex-col">
+  <header class="sticky top-0 z-30 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-surface-light dark:bg-surface-dark px-6 py-3 shadow-sm">
+    <div class="flex items-center gap-3">
+      <div class="size-8 text-primary">
+        <span class="material-symbols-outlined text-3xl">health_and_safety</span>
+      </div>
+      <div class="flex flex-col">
+        <h1 class="text-lg font-extrabold leading-tight tracking-tight">Earlyrisk AI</h1>
+        <p class="text-xs text-slate-500 dark:text-slate-400">Guest Demo (no account)</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <a href="index.html" class="hidden sm:inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-semibold">
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        Back to Home
+      </a>
+      <a href="../silent%20disease/login.html" class="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-primary hover:bg-blue-700 text-white text-sm font-semibold shadow-sm">
+        <span class="material-symbols-outlined text-[18px]">login</span>
+        Login
+      </a>
+    </div>
+  </header>
+
+  <main class="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="mb-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#1a202c] p-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-primary">info</span>
+        <div>
+          <p class="font-semibold">Analyze without login</p>
+          <p class="text-sm text-slate-600 dark:text-slate-400">Login to unlock full health history, report uploads, and continuous tracking.</p>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <a href="../silent%20disease/login.html" class="px-4 py-2 rounded-lg bg-primary hover:bg-blue-700 text-white text-sm font-bold">Login</a>
+        <a href="../silent%20disease/signup.html" class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-bold">Register</a>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <!-- Left: Health Form -->
+      <section class="lg:col-span-4 bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+        <div class="p-5 border-b border-slate-100 dark:border-slate-800">
+          <h2 class="text-lg font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary">assignment</span>
+            Health Data Entry
+          </h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Guest demo is limited to <span class="font-bold">3</span> attempts.</p>
+          <p id="attemptStatus" class="text-sm mt-2 text-slate-600 dark:text-slate-300"></p>
+        </div>
+        <form id="healthForm" class="p-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-semibold text-slate-500">Age</span>
+            <input name="age" type="number" min="0" max="120" value="42" class="rounded-lg" required />
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-semibold text-slate-500">Gender</span>
+            <select name="gender" class="rounded-lg" required>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-semibold text-slate-500">Height (cm)</span>
+            <input name="height_cm" type="number" min="50" max="250" value="172" class="rounded-lg" required />
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-semibold text-slate-500">Weight (kg)</span>
+            <input name="weight_kg" type="number" min="10" max="300" value="74" step="0.1" class="rounded-lg" required />
+          </label>
+
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-semibold text-slate-500">BP Systolic</span>
+            <input name="bp_systolic" type="number" min="50" max="250" value="122" class="rounded-lg" required />
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-semibold text-slate-500">BP Diastolic</span>
+            <input name="bp_diastolic" type="number" min="30" max="160" value="78" class="rounded-lg" required />
+          </label>
+
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-semibold text-slate-500">Sugar (mg/dL)</span>
+            <input name="sugar_mgdl" type="number" min="40" max="400" value="105" class="rounded-lg" required />
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-semibold text-slate-500">HbA1c (%)</span>
+            <input name="hba1c_pct" type="number" min="2" max="20" value="5.7" step="0.1" class="rounded-lg" required />
+          </label>
+
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-semibold text-slate-500">Cholesterol (mg/dL)</span>
+            <input name="cholesterol_mgdl" type="number" min="60" max="500" value="190" class="rounded-lg" required />
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-semibold text-slate-500">Sleep (hrs)</span>
+            <input name="sleep_hours" type="number" min="0" max="24" value="7" step="0.5" class="rounded-lg" required />
+          </label>
+
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-semibold text-slate-500">Exercise (min/week)</span>
+            <input name="exercise_mins_per_week" type="number" min="0" max="2000" value="90" class="rounded-lg" required />
+          </label>
+          <label class="flex flex-col gap-1">
+            <span class="text-xs font-semibold text-slate-500">Stress (0-10)</span>
+            <input name="stress_level" type="number" min="0" max="10" value="4" class="rounded-lg" required />
+          </label>
+
+          <label class="sm:col-span-2 flex items-center gap-2 pt-1">
+            <input name="family_history" type="checkbox" class="rounded" />
+            <span class="text-sm text-slate-700 dark:text-slate-200 font-medium">Family history of chronic disease</span>
+          </label>
+
+          <div class="sm:col-span-2 flex flex-col gap-2 pt-2">
+            <button id="analyzeBtn" type="submit" class="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-primary hover:bg-blue-700 text-white text-sm font-bold shadow-sm">
+              <span class="material-symbols-outlined text-[18px]">analytics</span>
+              Analyze
+            </button>
+            <p id="blockMessage" class="hidden text-sm font-semibold text-red-600 dark:text-red-400"></p>
+            <p id="apiMessage" class="text-xs text-slate-500 dark:text-slate-400"></p>
+          </div>
+        </form>
+      </section>
+
+      <!-- Right: Results -->
+      <section class="lg:col-span-8 space-y-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          <div class="bg-white dark:bg-[#1a202c] rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+            <p class="text-xs font-bold text-slate-500">Diabetes Risk</p>
+            <p id="riskDiabetes" class="text-2xl font-black mt-1">—</p>
+          </div>
+          <div class="bg-white dark:bg-[#1a202c] rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+            <p class="text-xs font-bold text-slate-500">Heart Risk</p>
+            <p id="riskHeart" class="text-2xl font-black mt-1">—</p>
+          </div>
+          <div class="bg-white dark:bg-[#1a202c] rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+            <p class="text-xs font-bold text-slate-500">Liver Risk</p>
+            <p id="riskLiver" class="text-2xl font-black mt-1">—</p>
+          </div>
+          <div class="bg-white dark:bg-[#1a202c] rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+            <p class="text-xs font-bold text-slate-500">Depression Risk (ML)</p>
+            <p id="riskDepression" class="text-2xl font-black mt-1">—</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <div class="bg-white dark:bg-[#1a202c] rounded-xl border border-slate-200 dark:border-slate-800 p-5">
+            <div class="flex items-center justify-between">
+              <h3 class="font-bold flex items-center gap-2"><span class="material-symbols-outlined text-primary">monitoring</span> Trends</h3>
+              <span class="text-xs text-slate-500" id="trendHint">From current analysis</span>
+            </div>
+            <div class="mt-4">
+              <canvas id="trendChart" height="140"></canvas>
+            </div>
+          </div>
+
+          <div class="bg-white dark:bg-[#1a202c] rounded-xl border border-slate-200 dark:border-slate-800 p-5">
+            <h3 class="font-bold flex items-center gap-2"><span class="material-symbols-outlined text-primary">person</span> Body Heatmap</h3>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Visual risk intensity by system.</p>
+            <div class="mt-4 grid grid-cols-2 gap-3">
+              <div id="heatHeart" class="rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+                <p class="text-xs font-bold">Heart</p>
+                <p class="text-sm mt-1" id="heatHeartText">—</p>
+              </div>
+              <div id="heatLiver" class="rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+                <p class="text-xs font-bold">Liver</p>
+                <p class="text-sm mt-1" id="heatLiverText">—</p>
+              </div>
+              <div id="heatDiabetes" class="rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+                <p class="text-xs font-bold">Metabolic</p>
+                <p class="text-sm mt-1" id="heatDiabetesText">—</p>
+              </div>
+              <div id="heatMind" class="rounded-lg border border-slate-200 dark:border-slate-700 p-4">
+                <p class="text-xs font-bold">Mental Health</p>
+                <p class="text-sm mt-1" id="heatMindText">—</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-[#1a202c] rounded-xl border border-slate-200 dark:border-slate-800 p-5">
+          <h3 class="font-bold flex items-center gap-2"><span class="material-symbols-outlined text-primary">tips_and_updates</span> Advice</h3>
+          <ul id="adviceList" class="mt-3 space-y-2 text-sm text-slate-700 dark:text-slate-200"></ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="demo.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Silent Disease Detection (SDD) - Dashboard</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#2463eb",
+            "background-light": "#f6f6f8",
+            "background-dark": "#111621",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+  <style>
+    /* Custom scrollbar for better aesthetics in table/lists */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    .dark ::-webkit-scrollbar-thumb {
+      background: #334155;
+    }
+
+    .dark ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+  </style>
+</head>
+
+<body
+  class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-white min-h-screen flex flex-col">
+  <!-- Persistent Profile Header -->
+  <header class="bg-white dark:bg-[#1a202c] border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-center justify-between py-4 gap-4">
+        <!-- User Info -->
+        <div class="flex items-center gap-4 w-full md:w-auto">
+          <div
+            class="bg-center bg-no-repeat bg-cover rounded-full h-12 w-12 shrink-0 shadow-sm border border-slate-100 dark:border-slate-700"
+            data-alt="Portrait of user John Doe smiling"
+            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAUVoKe9hsXTboV-q8J5bRv3p4TJROjut5xkiVBfWlSNQ7CUdXSAZnS8-lbBQDkPVcu1yAPkl8VGOOn_Imvk1Y8oy5P99ftOXchRG4LRDkfLESUKm9DhWuy7y7TIf74ou3Nq1rkuJwSti5umeflziv88fQG7J56gdr8iD4YAeHYu5miwM59BYyyJDfuDc0qPC5v60nUFE9bt10MsHIg1E_ZqT2WaXVC0i-1LIgirTuxOen6spH85Hc7oGUWyFStzGRWzOKI6Gm58htc");'>
+          </div>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-2">
+              <h1 id="sddUserName" class="text-lg font-bold text-slate-900 dark:text-white leading-tight">Loading…</h1>
+              <span
+                class="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-2 py-0.5 text-xs font-medium text-green-700 dark:text-green-400">
+                <span id="sddUserBmi">BMI —</span>
+              </span>
+            </div>
+            <p id="sddUserMeta" class="text-slate-500 dark:text-slate-400 text-sm">Session loading…</p>
+          </div>
+        </div>
+        <!-- Actions -->
+        <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+          <button onclick="window.location.href='dashboard1.html'"
+            class="flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-primary hover:bg-blue-700 text-white text-sm font-semibold transition-colors shadow-sm">
+            <span class="hidden sm:inline">View Risk Metrics</span>
+            <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+          </button>
+          <button data-sdd-logout
+            class="flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 text-sm font-semibold transition-colors">
+            <span class="material-symbols-outlined text-[18px]">logout</span>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- Main Dashboard Layout -->
+  <main class="flex-grow w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8 h-full">
+      <!-- Left Sidebar (1 Column) -->
+      <aside class="lg:col-span-1 space-y-6">
+        <!-- Upload Zone -->
+        <div
+          class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col h-full max-h-[calc(100vh-140px)] sticky top-24">
+          <div class="p-4 border-b border-slate-100 dark:border-slate-800">
+            <h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary">upload_file</span>
+              Health Documents Upload
+            </h3>
+          </div>
+          <div class="p-4 flex flex-col gap-4 overflow-y-auto">
+            <div class="border border-slate-200 dark:border-slate-700 rounded-lg p-4 bg-slate-50 dark:bg-slate-800/40">
+              <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">Upload PDF/Image Report</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Supports PDF and images. The system extracts HbA1c, sugar, cholesterol, and BP when present.</p>
+              <input id="sddReportFile" type="file" accept="application/pdf,image/*" class="mt-3 w-full text-sm" />
+              <button id="sddUploadBtn" type="button"
+                class="mt-3 w-full flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-primary hover:bg-blue-700 text-white text-sm font-bold shadow-sm">
+                <span class="material-symbols-outlined text-[18px]">document_scanner</span>
+                Upload & Scan
+              </button>
+              <p id="sddUploadStatus" class="mt-3 text-sm text-slate-600 dark:text-slate-300"></p>
+              <div id="sddDetectedValues" class="mt-3 text-xs text-slate-500 dark:text-slate-400"></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+      <!-- Main Content Area (3 Columns) -->
+      <section class="lg:col-span-3">
+        <div
+          class="bg-white dark:bg-[#1a202c] rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 h-full flex flex-col">
+          <!-- Header -->
+          <div
+            class="p-6 border-b border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h2 class="text-xl font-bold text-slate-900 dark:text-white tracking-tight">Run AI Analysis</h2>
+              <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Enter current vitals and run the SDD engine (rules + ML).</p>
+              <p id="sddApiMessage" class="text-xs text-slate-500 dark:text-slate-400 mt-2"></p>
+            </div>
+            <div class="flex items-center gap-3">
+              <button id="sddAnalyzeBtn" type="button"
+                class="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary hover:bg-blue-700 text-white shadow-sm text-sm font-bold transition-all">
+                <span class="material-symbols-outlined text-[18px]">analytics</span>
+                Analyze
+              </button>
+            </div>
+          </div>
+
+          <div class="p-6 border-b border-slate-100 dark:border-slate-800">
+            <form id="sddAnalyzeForm" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <label class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-slate-500">Age</span>
+                <input id="sddAge" type="number" min="0" max="120" class="rounded-lg" required />
+              </label>
+              <label class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-slate-500">Gender</span>
+                <select id="sddGender" class="rounded-lg" required>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
+                </select>
+              </label>
+              <label class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-slate-500">Family History</span>
+                <select id="sddFamilyHistory" class="rounded-lg" required>
+                  <option value="0">No</option>
+                  <option value="1">Yes</option>
+                </select>
+              </label>
+
+              <label class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-slate-500">Height (cm)</span>
+                <input id="sddHeight" type="number" min="50" max="250" class="rounded-lg" required />
+              </label>
+              <label class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-slate-500">Weight (kg)</span>
+                <input id="sddWeight" type="number" min="10" max="300" step="0.1" class="rounded-lg" required />
+              </label>
+              <label class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-slate-500">Cholesterol (mg/dL)</span>
+                <input id="sddCholesterol" type="number" min="60" max="500" class="rounded-lg" required />
+              </label>
+
+              <label class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-slate-500">Sugar (mg/dL)</span>
+                <input id="sddSugar" type="number" min="40" max="400" class="rounded-lg" required />
+              </label>
+              <label class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-slate-500">HbA1c (%)</span>
+                <input id="sddHba1c" type="number" min="2" max="20" step="0.1" class="rounded-lg" required />
+              </label>
+              <label class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-slate-500">Sleep (hrs)</span>
+                <input id="sddSleep" type="number" min="0" max="24" step="0.5" class="rounded-lg" required />
+              </label>
+
+              <label class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-slate-500">BP Systolic</span>
+                <input id="sddBpSys" type="number" min="50" max="250" class="rounded-lg" required />
+              </label>
+              <label class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-slate-500">BP Diastolic</span>
+                <input id="sddBpDia" type="number" min="30" max="160" class="rounded-lg" required />
+              </label>
+              <label class="flex flex-col gap-1">
+                <span class="text-xs font-semibold text-slate-500">Exercise (min/week)</span>
+                <input id="sddExercise" type="number" min="0" max="2000" class="rounded-lg" required />
+              </label>
+
+              <label class="flex flex-col gap-1 md:col-span-3">
+                <span class="text-xs font-semibold text-slate-500">Stress (0-10)</span>
+                <input id="sddStress" type="number" min="0" max="10" class="rounded-lg" required />
+              </label>
+            </form>
+          </div>
+
+          <div class="p-6 border-b border-slate-100 dark:border-slate-800">
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+              <div class="bg-slate-50 dark:bg-slate-900/30 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+                <p class="text-xs font-bold text-slate-500">Diabetes Risk</p>
+                <p id="sddRiskDiabetes" class="text-2xl font-black mt-1">—</p>
+              </div>
+              <div class="bg-slate-50 dark:bg-slate-900/30 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+                <p class="text-xs font-bold text-slate-500">Heart Risk</p>
+                <p id="sddRiskHeart" class="text-2xl font-black mt-1">—</p>
+              </div>
+              <div class="bg-slate-50 dark:bg-slate-900/30 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+                <p class="text-xs font-bold text-slate-500">Liver Risk</p>
+                <p id="sddRiskLiver" class="text-2xl font-black mt-1">—</p>
+              </div>
+              <div class="bg-slate-50 dark:bg-slate-900/30 rounded-xl border border-slate-200 dark:border-slate-800 p-4">
+                <p class="text-xs font-bold text-slate-500">Depression Risk (ML)</p>
+                <p id="sddRiskDepression" class="text-2xl font-black mt-1">—</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 mt-6">
+              <div class="bg-white dark:bg-[#1a202c] rounded-xl border border-slate-200 dark:border-slate-800 p-5">
+                <h3 class="font-bold flex items-center gap-2"><span class="material-symbols-outlined text-primary">monitoring</span> Trends</h3>
+                <div class="mt-4">
+                  <canvas id="sddTrendChart" height="140"></canvas>
+                </div>
+              </div>
+              <div class="bg-white dark:bg-[#1a202c] rounded-xl border border-slate-200 dark:border-slate-800 p-5">
+                <h3 class="font-bold flex items-center gap-2"><span class="material-symbols-outlined text-primary">tips_and_updates</span> Advice</h3>
+                <ul id="sddAdviceList" class="mt-3 space-y-2 text-sm text-slate-700 dark:text-slate-200"></ul>
+              </div>
+            </div>
+          </div>
+          <!-- Actions Bar (Secondary) -->
+          <div
+            class="px-6 py-4 bg-slate-50 dark:bg-slate-900/30 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+            <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
+              <span class="material-symbols-outlined text-[20px] text-slate-400">info</span>
+              <span>Entries should be recorded at start of each month.</span>
+            </div>
+            <button
+              class="flex items-center gap-2 px-3 py-1.5 rounded-md bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 text-sm font-medium hover:border-primary hover:text-primary transition-colors">
+              <span class="material-symbols-outlined text-[18px]">add</span>
+              Add Month
+            </button>
+          </div>
+          <!-- Data Table -->
+          <div class="hidden overflow-x-auto flex-1 p-0">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="bg-white dark:bg-[#1a202c] border-b border-slate-200 dark:border-slate-700">
+                  <th class="p-4 pl-6 text-xs font-semibold text-slate-500 uppercase tracking-wider min-w-[140px]">Date
+                  </th>
+                  <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider min-w-[100px]">Glucose
+                    <span class="text-[10px] normal-case text-slate-400">(mg/dL)</span></th>
+                  <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider min-w-[100px]">BP Sys
+                    <span class="text-[10px] normal-case text-slate-400">(mmHg)</span></th>
+                  <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider min-w-[100px]">BP Dia
+                    <span class="text-[10px] normal-case text-slate-400">(mmHg)</span></th>
+                  <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider min-w-[90px]">Sleep <span
+                      class="text-[10px] normal-case text-slate-400">(hrs)</span></th>
+                  <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider min-w-[100px]">Steps
+                    <span class="text-[10px] normal-case text-slate-400">(avg)</span></th>
+                  <th class="p-4 pr-6 text-xs font-semibold text-slate-500 uppercase tracking-wider min-w-[120px]">
+                    Stress <span class="text-[10px] normal-case text-slate-400">(1-10)</span></th>
+                  <th class="p-4 w-10"></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                <!-- Row 1 -->
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+                  <td class="p-3 pl-6">
+                    <input
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                      type="date" value="2023-10-01" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                      type="number" value="95" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                      type="number" value="118" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                      type="number" value="78" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                      step="0.5" type="number" value="7.5" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                      type="number" value="8450" />
+                  </td>
+                  <td class="p-3 pr-6">
+                    <select
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary">
+                      <option>1 - Low</option>
+                      <option selected="">3 - Mild</option>
+                      <option>5 - Moderate</option>
+                      <option>8 - High</option>
+                      <option>10 - Severe</option>
+                    </select>
+                  </td>
+                  <td class="p-3 text-center">
+                    <button
+                      class="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span class="material-symbols-outlined text-[18px]">delete</span>
+                    </button>
+                  </td>
+                </tr>
+                <!-- Row 2 -->
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+                  <td class="p-3 pl-6">
+                    <input
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                      type="date" value="2023-09-01" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                      type="number" value="98" />
+                  </td>
+                  <td class="p-3">
+                    <!-- Error State Example -->
+                    <input
+                      class="w-full text-sm rounded border-red-300 dark:border-red-800 bg-red-50 dark:bg-red-900/10 text-red-900 dark:text-red-100 focus:border-red-500 focus:ring-red-500"
+                      title="Value is higher than normal range" type="number" value="142" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                      type="number" value="88" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                      step="0.5" type="number" value="6.2" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                      type="number" value="6200" />
+                  </td>
+                  <td class="p-3 pr-6">
+                    <select
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary">
+                      <option>1 - Low</option>
+                      <option>3 - Mild</option>
+                      <option selected="">6 - Elevated</option>
+                      <option>8 - High</option>
+                      <option>10 - Severe</option>
+                    </select>
+                  </td>
+                  <td class="p-3 text-center">
+                    <button
+                      class="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span class="material-symbols-outlined text-[18px]">delete</span>
+                    </button>
+                  </td>
+                </tr>
+                <!-- Row 3 -->
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+                  <td class="p-3 pl-6">
+                    <input
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                      type="date" value="2023-08-01" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                      type="number" value="92" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                      type="number" value="120" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                      type="number" value="80" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                      step="0.5" type="number" value="7.0" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary"
+                      type="number" value="9100" />
+                  </td>
+                  <td class="p-3 pr-6">
+                    <select
+                      class="w-full text-sm rounded border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white focus:border-primary focus:ring-primary">
+                      <option selected="">2 - Good</option>
+                      <option>3 - Mild</option>
+                      <option>5 - Moderate</option>
+                      <option>8 - High</option>
+                      <option>10 - Severe</option>
+                    </select>
+                  </td>
+                  <td class="p-3 text-center">
+                    <button
+                      class="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span class="material-symbols-outlined text-[18px]">delete</span>
+                    </button>
+                  </td>
+                </tr>
+                <!-- Empty Row (Placeholder) -->
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group">
+                  <td class="p-3 pl-6">
+                    <input
+                      class="w-full text-sm rounded border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 focus:border-primary focus:ring-primary focus:bg-white dark:focus:bg-slate-700 focus:border-solid"
+                      type="date" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 focus:border-primary focus:ring-primary focus:bg-white dark:focus:bg-slate-700 focus:border-solid"
+                      placeholder="-" type="number" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 focus:border-primary focus:ring-primary focus:bg-white dark:focus:bg-slate-700 focus:border-solid"
+                      placeholder="-" type="number" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 focus:border-primary focus:ring-primary focus:bg-white dark:focus:bg-slate-700 focus:border-solid"
+                      placeholder="-" type="number" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 focus:border-primary focus:ring-primary focus:bg-white dark:focus:bg-slate-700 focus:border-solid"
+                      placeholder="-" type="number" />
+                  </td>
+                  <td class="p-3">
+                    <input
+                      class="w-full text-sm rounded border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 focus:border-primary focus:ring-primary focus:bg-white dark:focus:bg-slate-700 focus:border-solid"
+                      placeholder="-" type="number" />
+                  </td>
+                  <td class="p-3 pr-6">
+                    <select
+                      class="w-full text-sm rounded border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 focus:border-primary focus:ring-primary focus:bg-white dark:focus:bg-slate-700 focus:border-solid">
+                      <option disabled="" selected="">Select...</option>
+                      <option>1 - Low</option>
+                      <option>5 - Moderate</option>
+                      <option>10 - Severe</option>
+                    </select>
+                  </td>
+                  <td class="p-3 text-center">
+                    <button
+                      class="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <span class="material-symbols-outlined text-[18px]">delete</span>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Footer Pagination / Info -->
+          <div
+            class="px-6 py-4 border-t border-slate-100 dark:border-slate-800 flex justify-between items-center text-xs text-slate-500">
+            <span>Showing recent 4 entries</span>
+            <div class="flex gap-2">
+              <a class="hover:text-primary" href="#">View Full History</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="env.js"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script src="dashboard-app.js"></script>
+
+</html>

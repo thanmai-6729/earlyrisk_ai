@@ -1,0 +1,11 @@
+disease,condition,advice
+Diabetes,sugar_mgdl >= 126,"Book a fasting glucose + HbA1c test and discuss a diabetes care plan with a clinician."
+Diabetes,bmi >= 30,"Aim for gradual weight loss (5–10% over 3–6 months) via calorie control + strength training."
+Diabetes,exercise_mins_per_week < 150,"Increase activity toward 150 minutes/week (brisk walking/cycling) + 2 days strength."
+Heart Disease,bp_systolic >= 140 or bp_diastolic >= 90,"Recheck BP on 2–3 different days; consider DASH diet, reduced salt, and a clinician visit."
+Heart Disease,cholesterol_mgdl >= 240,"Consider a lipid panel follow-up; increase soluble fiber and reduce trans/saturated fat."
+Heart Disease,stress_level >= 7,"Add daily stress reduction (10 min breathing/meditation) and protect sleep schedule."
+Fatty Liver,bmi >= 30,"Reduce sugary drinks and refined carbs; target 5–10% weight loss to improve fatty liver risk."
+Fatty Liver,cholesterol_mgdl >= 240,"Shift toward Mediterranean-style eating and increase omega-3 rich foods (fish, flax, walnuts)."
+Depression,stress_level >= 7 and sleep_hours < 6,"Prioritize sleep hygiene (consistent bedtime, no screens 60 min before bed); seek mental health support if persistent."
+Depression,exercise_mins_per_week < 60,"Try a small routine (10–20 min walk daily); exercise can improve mood and sleep quality."

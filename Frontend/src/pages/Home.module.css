@@ -1,0 +1,155 @@
+.page {
+  padding: 0;
+}
+
+.hero {
+  padding: 56px 0;
+  background: linear-gradient(135deg, #f0f9ff 0%, #f8fafc 100%);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.heroGrid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (max-width: 920px) {
+  .heroGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.title {
+  font-size: 44px;
+  line-height: 1.05;
+  margin: 0;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.gradient {
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  margin: 14px 0 0 0;
+  font-size: 16px;
+  color: #475569;
+  border-left: 4px solid #3b82f6;
+  padding-left: 14px;
+}
+
+.ctaRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-weight: 900;
+  color: #fff;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+}
+
+.secondaryBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-weight: 900;
+  background: #fff;
+  border: 1px solid rgba(226, 232, 240, 1);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+@media (max-width: 560px) {
+  .stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stat {
+  background: #fff;
+  border: 1px solid rgba(226, 232, 240, 1);
+  border-radius: 16px;
+  padding: 12px;
+}
+
+.statNumber {
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.statLabel {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid rgba(226, 232, 240, 1);
+  border-radius: 18px;
+  padding: 18px;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.cardText {
+  margin: 10px 0 0 0;
+  color: #475569;
+}
+
+.pills {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.pill {
+  font-size: 12px;
+  font-weight: 800;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.08);
+  color: #2563eb;
+}
+
+.cardSubtitle {
+  margin: 16px 0 0 0;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.list {
+  margin: 10px 0 0 18px;
+  color: #475569;
+}

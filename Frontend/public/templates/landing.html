@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Silent Disease Detection (SDD) | AI Early Risk Detection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lenis@1.1.1/dist/lenis.min.js"></script>
+</head>
+<body>
+    <!-- Scroll Progress -->
+    <div class="scroll-progress"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="#home" class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>Earlyrisk AI</span>
+            </a>
+            <div class="nav-menu">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#problem" class="nav-link">The Problem</a>
+                <a href="#solution" class="nav-link">Our Solution</a>
+                <a href="#demo" class="nav-link">Live Demo</a>
+                <a href="#technology" class="nav-link">Technology</a>
+                <button class="btn-primary" id="tryDemoBtn">Try Demo</button>
+                <button class="btn-secondary" id="loginSignupBtn">Login / Sign Up</button>
+            </div>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="gradient-text">Detect What Patients</span><br>
+                    Don't Even Know They Have
+                </h1>
+                <p class="hero-subtitle">
+                    AI-powered early detection of silent diseases like diabetes, hypertension, 
+                    and cardiac risks 2-5 years before clinical diagnosis.
+                </p>
+                <div class="hero-buttons">
+                    <button class="btn-primary btn-large" id="startDetectionBtn">
+                        <i class="fas fa-play-circle"></i>
+                        Try Demo
+                    </button>
+                    <button class="btn-secondary btn-large" id="viewDemoBtn">
+                        <i class="fas fa-chart-line"></i>
+                        Login / Sign Up
+                    </button>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <h3>3-5 Years</h3>
+                        <p>Early Detection Lead Time</p>
+                    </div>
+                    <div class="stat">
+                        <h3>92%</h3>
+                        <p>Detection Accuracy</p>
+                    </div>
+                    <div class="stat">
+                        <h3>60%</h3>
+                        <p>Preventable Complications</p>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="medical-illustration">
+                    <div class="heart-monitor">
+                        <div class="heartbeat-line">
+                            <svg viewBox="0 0 400 200" class="heartbeat-svg">
+                                <path d="M0,100 Q50,50 100,100 T200,100 T300,50 T400,100" 
+                                      fill="none" 
+                                      stroke="#3b82f6" 
+                                      stroke-width="3"/>
+                                <circle cx="100" cy="100" r="4" fill="#ef4444">
+                                    <animate attributeName="r" values="4;8;4" dur="1s" repeatCount="indefinite"/>
+                                </circle>
+                            </svg>
+                        </div>
+                        <div class="monitor-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-heartbeat"></i>
+                                <span id="heartRate">72 BPM</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-thermometer-half"></i>
+                                <span>98.6°F</span>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-lungs"></i>
+                                <span id="oxygenLevel">99% O₂</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="data-visualization">
+                        <div class="chart-container">
+                            <div class="chart-title">Glucose Trends (Last 6 Months)</div>
+                            <div class="chart">
+                                <div class="bar" style="height: 60%; background: #10b981;"></div>
+                                <div class="bar" style="height: 65%; background: #10b981;"></div>
+                                <div class="bar" style="height: 75%; background: #f59e0b;"></div>
+                                <div class="bar" style="height: 85%; background: #f59e0b;"></div>
+                                <div class="bar" style="height: 95%; background: #ef4444;"></div>
+                                <div class="bar" style="height: 105%; background: #ef4444;"></div>
+                            </div>
+                            <div class="chart-labels">
+                                <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span><span>May</span><span>Jun</span>
+                            </div>
+                        </div>
+                        
+                        <div class="risk-indicators">
+                            <div class="indicator low">
+                                <div class="indicator-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="indicator-text">Blood Pressure</div>
+                            </div>
+                            <div class="indicator medium">
+                                <div class="indicator-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="indicator-text">Glucose Levels</div>
+                            </div>
+                            <div class="indicator low">
+                                <div class="indicator-icon">
+                                    <i class="fas fa-check-circle"></i>
+                                </div>
+                                <div class="indicator-text">Cholesterol</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-wave">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25" fill="currentColor"></path>
+                <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5" fill="currentColor"></path>
+                <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z" fill="currentColor"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section id="problem" class="section problem-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">The Silent Epidemic</h2>
+                <p class="section-subtitle">Millions suffer from undetected diseases until it's too late</p>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Delayed Detection</h3>
+                    <p>Most life-threatening conditions remain undiagnosed for 5+ years despite early signals.</p>
+                    <div class="problem-stat">40-60%</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h3>Fragmented Data</h3>
+                    <p>Health signals are scattered across lab reports, wearables, and lifestyle data with no connection.</p>
+                    <div class="problem-stat">12+ Sources</div>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">
+                        <i class="fas fa-stethoscope"></i>
+                    </div>
+                    <h3>Reactive Healthcare</h3>
+                    <p>Current systems wait for symptoms to appear rather than predicting and preventing disease.</p>
+                    <div class="problem-stat">$3.8T Cost</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="section solution-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Our AI-Powered Solution</h2>
+                <p class="section-subtitle">Connecting the dots before diseases become critical</p>
+            </div>
+            <div class="solution-content">
+                <div class="solution-visual">
+                    <div class="dashboard-preview">
+    <div class="dashboard-header">
+        <div class="dashboard-title">SilentDetect Dashboard</div>
+        <div class="dashboard-tabs">
+            <span class="tab active" data-tab="risk">Risk Analysis</span>
+            <span class="tab" data-tab="trends">Trends</span>
+            <span class="tab" data-tab="prevention">Prevention Plan</span>
+        </div>
+    </div>
+    <div class="dashboard-body">
+        <!-- Risk Analysis Tab (Default) -->
+        <div class="tab-content active" id="risk-tab">
+            <div class="risk-meter">
+                <div class="risk-title">Early Diabetes Risk</div>
+                <div class="risk-score">68% Probability</div>
+                <div class="risk-bar">
+                    <div class="risk-fill" style="width: 68%"></div>
+                </div>
+                <div class="risk-time">~3.2 years to clinical diagnosis</div>
+            </div>
+            <div class="detection-list">
+                <div class="detection-item">
+                    <i class="fas fa-arrow-up red"></i>
+                    <span>Fasting glucose increasing 0.4 mg/dL/month</span>
+                </div>
+                <div class="detection-item">
+                    <i class="fas fa-bed yellow"></i>
+                    <span>Sleep efficiency declined 12% with frequent wake-ups</span>
+                </div>
+                <div class="detection-item">
+                    <i class="fas fa-heartbeat blue"></i>
+                    <span>Triglyceride/HDL ratio worsening despite stable weight</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Trends Tab -->
+        <div class="tab-content" id="trends-tab">
+            <div class="trends-header">
+                <h4><i class="fas fa-chart-line"></i> Health Trends Analysis</h4>
+                <select class="trend-selector">
+                    <option>Glucose Levels</option>
+                    <option>Blood Pressure</option>
+                    <option>Cholesterol</option>
+                    <option>Weight Trend</option>
+                </select>
+            </div>
+            <div class="trend-chart">
+                <div class="chart-grid">
+                    <div class="grid-line"></div>
+                    <div class="grid-line"></div>
+                    <div class="grid-line"></div>
+                    <div class="grid-line"></div>
+                    <div class="trend-line">
+                        <div class="data-point" style="left: 10%; height: 30%"></div>
+                        <div class="data-point" style="left: 25%; height: 35%"></div>
+                        <div class="data-point" style="left: 40%; height: 45%"></div>
+                        <div class="data-point" style="left: 55%; height: 65%"></div>
+                        <div class="data-point" style="left: 70%; height: 75%"></div>
+                        <div class="data-point" style="left: 85%; height: 85%"></div>
+                    </div>
+                </div>
+                <div class="chart-labels">
+                    <span>Jan</span><span>Mar</span><span>May</span><span>Jul</span><span>Sep</span><span>Nov</span>
+                </div>
+            </div>
+            <div class="trend-insights">
+                <h5><i class="fas fa-lightbulb"></i> Trend Insight</h5>
+                <p>Glucose levels showing consistent upward trend over 6 months. Early intervention recommended.</p>
+            </div>
+        </div>
+        
+        <!-- Prevention Plan Tab -->
+        <div class="tab-content" id="prevention-tab">
+            <div class="plan-header">
+                <h4><i class="fas fa-clipboard-list"></i> Personalized Prevention Plan</h4>
+                <div class="plan-timeline">Next 90 Days</div>
+            </div>
+            <div class="plan-steps">
+                <div class="plan-step">
+                    <div class="step-icon"><i class="fas fa-utensils"></i></div>
+                    <div class="step-content">
+                        <h5>Nutrition</h5>
+                        <p>Reduce refined carbs by 50%. Increase fiber intake to 30g/day.</p>
+                        <div class="step-due">Start today</div>
+                    </div>
+                </div>
+                <div class="plan-step">
+                    <div class="step-icon"><i class="fas fa-running"></i></div>
+                    <div class="step-content">
+                        <h5>Exercise</h5>
+                        <p>150 minutes moderate exercise weekly. Include 2 strength sessions.</p>
+                        <div class="step-due">Weekly goal</div>
+                    </div>
+                </div>
+                <div class="plan-step">
+                    <div class="step-icon"><i class="fas fa-bed"></i></div>
+                    <div class="step-content">
+                        <h5>Sleep</h5>
+                        <p>Achieve 7.5 hours nightly. Establish consistent sleep schedule.</p>
+                        <div class="step-due">Daily goal</div>
+                    </div>
+                </div>
+                <div class="plan-step">
+                    <div class="step-icon"><i class="fas fa-heartbeat"></i></div>
+                    <div class="step-content">
+                        <h5>Monitoring</h5>
+                        <p>Weekly fasting glucose checks. Monthly BP tracking.</p>
+                        <div class="step-due">Starts next week</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                </div>
+                <div class="solution-features">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Temporal Pattern Recognition</h3>
+                            <p>Detects subtle biomarker drifts over time, not just threshold breaches.</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-link"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Cross-Signal Correlation</h3>
+                            <p>Connects fragmented symptoms across lab, lifestyle, and genetic data.</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div class="feature-content">
+                            <h3>Personalized Prevention Plans</h3>
+                            <p>Actionable recommendations for both patients and physicians.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Demo Section -->
+<section id="demo" class="section demo-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Live Risk Detection Demo</h2>
+            <p class="section-subtitle">Enter health data to see AI detection in action</p>
+        </div>
+        <div class="demo-container">
+            <div class="demo-input">
+                <h3>Patient Health Profile</h3>
+                <div class="input-group">
+                    <label for="age">
+                        <i class="fas fa-birthday-cake"></i>
+                        Age (years)
+                    </label>
+                    <input type="number" id="age" min="25" max="80" value="45" step="1">
+                    <div class="input-hint">25-80 years</div>
+                </div>
+                <div class="input-group">
+                    <label for="bmi">
+                        <i class="fas fa-weight"></i>
+                        BMI
+                    </label>
+                    <input type="number" id="bmi" min="18" max="40" value="27" step="0.1">
+                    <div class="input-hint">18-40 (Normal: 18.5-24.9)</div>
+                </div>
+                <div class="input-group">
+                    <label for="glucose">
+                        <i class="fas fa-tint"></i>
+                        Fasting Glucose (mg/dL)
+                    </label>
+                    <input type="number" id="glucose" min="70" max="300" value="105" step="1">
+                    <div class="input-hint">70-300 (Normal: < 100)</div>
+                </div>
+                <div class="input-group">
+                    <label for="sleep">
+                        <i class="fas fa-bed"></i>
+                        Sleep Quality (1-10)
+                    </label>
+                    <div class="star-rating">
+                        <div class="stars" id="sleep-stars">
+                            <span data-value="1">★</span>
+                            <span data-value="2">★</span>
+                            <span data-value="3">★</span>
+                            <span data-value="4">★</span>
+                            <span data-value="5">★</span>
+                            <span data-value="6">★</span>
+                            <span data-value="7">★</span>
+                            <span data-value="8">★</span>
+                            <span data-value="9">★</span>
+                            <span data-value="10">★</span>
+                        </div>
+                        <input type="hidden" id="sleep" value="7">
+                        <div class="sleep-value">7/10</div>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="stress">
+                        <i class="fas fa-brain"></i>
+                        Stress Level (1-10)
+                    </label>
+                    <div class="stress-slider-container">
+                        <input type="range" id="stress-slider" min="1" max="10" value="5">
+                        <div class="stress-labels">
+                            <span>Low</span>
+                            <span>Medium</span>
+                            <span>High</span>
+                        </div>
+                        <input type="hidden" id="stress" value="5">
+                        <div class="stress-value">5/10</div>
+                    </div>
+                </div>
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="family-diabetes">
+                        <span class="checkmark"></span>
+                        <i class="fas fa-dna"></i>
+                        Family History: Diabetes
+                    </label>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="family-hypertension">
+                        <span class="checkmark"></span>
+                        <i class="fas fa-heartbeat"></i>
+                        Family History: Hypertension
+                    </label>
+                </div>
+                <button class="btn-primary" id="analyzeBtn">
+                    <i class="fas fa-search"></i>
+                    Analyze Risk Patterns
+                </button>
+            </div>
+            <div class="demo-results">
+                <h3>AI Detection Results</h3>
+                <div class="results-placeholder" id="resultsPlaceholder">
+                    <p>Enter health data and click "Analyze" to see AI detection results</p>
+                    <i class="fas fa-microscope"></i>
+                </div>
+                <div class="risk-results" id="riskResults" style="display: none;">
+                    <div class="risk-card" id="diabetesResult">
+                        <div class="risk-header">
+                            <h4><i class="fas fa-tint"></i> Diabetes Risk</h4>
+                            <div class="risk-percentage" id="diabetesPercentage">0%</div>
+                        </div>
+                        <div class="risk-bar">
+                            <div class="risk-fill" id="diabetesBar"></div>
+                        </div>
+                        <div class="risk-details" id="diabetesDetails"></div>
+                    </div>
+                    <div class="risk-card" id="hypertensionResult">
+                        <div class="risk-header">
+                            <h4><i class="fas fa-heartbeat"></i> Hypertension Risk</h4>
+                            <div class="risk-percentage" id="hypertensionPercentage">0%</div>
+                        </div>
+                        <div class="risk-bar">
+                            <div class="risk-fill" id="hypertensionBar"></div>
+                        </div>
+                        <div class="risk-details" id="hypertensionDetails"></div>
+                    </div>
+                    <div class="prevention-tips" id="preventionTips"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+    <!-- Technology Section -->
+    <section id="technology" class="section tech-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Advanced Technology Stack</h2>
+                <p class="section-subtitle">Powered by cutting-edge AI and data science</p>
+            </div>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-wave-square"></i>
+                    </div>
+                    <h3>Temporal AI Models</h3>
+                    <p>LSTM and Transformer networks for time-series health data analysis.</p>
+                    <div class="tech-tag">Deep Learning</div>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                    <h3>Multi-Modal Fusion</h3>
+                    <p>Integrates lab results, wearable data, lifestyle, and genetic factors.</p>
+                    <div class="tech-tag">Data Fusion</div>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Trend Analysis Engine</h3>
+                    <p>Detects subtle biomarker drifts months before clinical thresholds.</p>
+                    <div class="tech-tag">Predictive Analytics</div>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Privacy-First Design</h3>
+                    <p>Federated learning and differential privacy for secure analysis.</p>
+                    <div class="tech-tag">Data Security</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <i class="fas fa-heartbeat"></i>
+                        <span>SilentDetect</span>
+                    </a>
+                    <p>AI-powered early detection of silent diseases. Detect what patients don't even know they have.</p>
+                    <div class="footer-contact">
+                        <p><i class="fas fa-envelope"></i> contact@silentdetect.ai</p>
+                        <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Hackathon Project</h4>
+                    <p>Built in 24 hours for healthcare innovation challenge.</p>
+                    <p>Team: SilentDetect AI</p>
+                    <p>© 2024 All Rights Reserved</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="script.js"></script>
+</body>
+</html>

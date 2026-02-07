@@ -1,0 +1,55 @@
+.card {
+  background: #fff;
+  border: 1px solid rgba(226, 232, 240, 1);
+  border-radius: 16px;
+  padding: 16px;
+}
+
+.title {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.item {
+  border-radius: 14px;
+  padding: 12px;
+  border: 1px solid rgba(226, 232, 240, 1);
+}
+
+.itemLabel {
+  font-size: 12px;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.itemValue {
+  margin-top: 6px;
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.low {
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.medium {
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.high {
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.note {
+  margin: 10px 0 0 0;
+  color: #64748b;
+  font-size: 12px;
+}

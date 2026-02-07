@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Silent Disease Detection (SDD) - Risk Metrics</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Theme Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#2463eb",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#111621",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#1a202c",
+                        "risk-low": "#eab308",     /* Yellow-500 */
+                        "risk-medium": "#f97316",  /* Orange-500 */
+                        "risk-high": "#dc2626",    /* Red-600 */
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        /* CSS-only Modal Logic using :target */
+        .modal {
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .modal:target {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-[#111318] dark:text-white font-display min-h-screen flex flex-col overflow-x-hidden">
+    <!-- Top Navigation -->
+    <header
+        class="sticky top-0 z-30 flex items-center justify-between whitespace-nowrap border-b border-solid border-[#e5e7eb] dark:border-[#2d3748] bg-surface-light dark:bg-surface-dark px-6 py-3 shadow-sm">
+        <div class="flex items-center gap-4">
+            <div class="size-8 text-primary">
+                <span class="material-symbols-outlined text-3xl">health_and_safety</span>
+            </div>
+            <h2 class="text-xl font-bold leading-tight tracking-tight text-[#111318] dark:text-white">Health AI</h2>
+        </div>
+        <div class="flex items-center gap-6">
+            <div class="hidden md:flex items-center gap-2 text-sm text-[#616e89] dark:text-[#a0aec0]">
+                <span class="material-symbols-outlined text-base">verified_user</span>
+                <span>Authorized Session</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="window.location.href='dashboard2.html'"
+                    class="flex cursor-pointer items-center justify-center gap-2 rounded-lg h-9 px-4 bg-primary hover:bg-blue-700 text-white text-sm font-semibold transition-colors shadow-sm">
+                    <span class="hidden sm:inline">Detailed Analysis</span>
+                    <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+                </button>
+                <button data-sdd-logout
+                    class="hidden md:flex cursor-pointer items-center justify-center rounded-lg h-9 px-4 border border-[#e5e7eb] dark:border-[#4a5568] hover:bg-gray-50 dark:hover:bg-[#2d3748] text-sm font-medium transition-colors">
+                    Logout
+                </button>
+                <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 border-2 border-white dark:border-[#2d3748] shadow-sm relative"
+                    data-alt="Profile picture of Dr. Sarah Smith"
+                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCLj0JjCMSwUFQftzqObgD5wK7c-t8CYneL-Mx0fg1Lp3ErWas_VgX2qs1H57LxptrXc3ABlIjhDYj_c5CzHjQ2zViCt-Rw9Zlp97PVS7bF56xq3DIMZBbs7cUu171-SUK4ORP5lrGiKLfpRX34UV6gSA9q68WZRaDf9stybL51Cg4-ARubLCSI_duRGaRZBZJkxZQDUhLCAiCu-Fxnm_2_q3WOIlThKymGzz7czLcUmBK4SElQ0zNCQZUNXLdJjFI-I5HeDlCJpwbK");'>
+                    <div
+                        class="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full border-2 border-white dark:border-[#2d3748]">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main class="flex-1 w-full max-w-[1200px] mx-auto p-4 md:p-6 lg:p-8 flex flex-col gap-8">
+        <!-- Page Heading & Patient Info -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex flex-col gap-2">
+                <h1 class="text-3xl md:text-4xl font-black tracking-tight text-[#111318] dark:text-white">Risk Metrics
+                    Dashboard</h1>
+                <div class="flex flex-wrap items-center gap-3 text-[#616e89] dark:text-[#a0aec0] text-sm md:text-base">
+                    <span class="flex items-center gap-1"><span
+                        class="material-symbols-outlined text-base">person</span> Patient: <strong id="sddPatientName">Loading…</strong></span>
+                    <span class="hidden md:inline text-gray-300">|</span>
+                    <span class="flex items-center gap-1"><span
+                        class="material-symbols-outlined text-base">fingerprint</span> ID: <span id="sddPatientId">…</span></span>
+                    <span class="hidden md:inline text-gray-300">|</span>
+                    <span
+                        class="inline-flex items-center rounded-full bg-green-100 dark:bg-green-900/30 px-2 py-0.5 text-xs font-bold text-green-700 dark:text-green-400">
+                        Active Monitoring
+                    </span>
+                </div>
+                <p id="sddPageMessage" class="text-xs text-[#616e89] dark:text-[#a0aec0]"></p>
+            </div>
+            <div class="flex gap-3">
+                <button
+                    class="flex items-center gap-2 bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium shadow-md shadow-blue-500/20 transition-all">
+                    <span class="material-symbols-outlined">description</span>
+                    Generate Report
+                </button>
+            </div>
+        </div>
+        <!-- Hero Section: Risk Gauges -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Gauge 1: Diabetes -->
+            <a class="group relative flex flex-col items-center justify-between gap-4 rounded-xl bg-surface-light dark:bg-surface-dark p-6 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] border border-transparent hover:border-risk-low/50 hover:shadow-lg transition-all cursor-pointer"
+                href="#modal-diabetes">
+                <div class="w-full flex justify-between items-start">
+                    <h3 class="text-lg font-bold text-[#111318] dark:text-white">DIABETES RISK</h3>
+                    <span
+                        class="material-symbols-outlined text-gray-400 group-hover:text-primary transition-colors">show_chart</span>
+                </div>
+                <div class="relative size-40 flex items-center justify-center">
+                    <!-- SVG Gauge -->
+                    <svg class="size-full -rotate-90 transform" viewbox="0 0 100 100">
+                        <!-- Background Circle -->
+                        <circle class="dark:stroke-gray-700" cx="50" cy="50" fill="none" r="40" stroke="#e5e7eb"
+                            stroke-width="8"></circle>
+                        <!-- Progress Circle (23%) -->
+                        <!-- Circumference = 2 * pi * 40 ~= 251.2 -->
+                        <!-- Offset = 251.2 * (1 - 0.23) = 193.4 -->
+                        <circle class="text-risk-low transition-all duration-1000 ease-out group-hover:stroke-[10]"
+                            id="sddGaugeDiabetesCircle" cx="50" cy="50" fill="none" r="40" stroke="currentColor" stroke-dasharray="251.2"
+                            stroke-dashoffset="193.4" stroke-linecap="round" stroke-width="8"></circle>
+                    </svg>
+                    <div class="absolute flex flex-col items-center">
+                        <span id="sddGaugeDiabetesPct" class="text-3xl font-bold text-[#111318] dark:text-white">—</span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center gap-1">
+                    <span id="sddGaugeDiabetesBand"
+                        class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-3 py-1 text-sm font-bold text-slate-700 dark:text-slate-200">
+                        —
+                    </span>
+                    <span
+                        class="text-xs text-[#616e89] dark:text-[#a0aec0] group-hover:text-primary mt-2 flex items-center gap-1">
+                        View Details <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </span>
+                </div>
+            </a>
+            <!-- Gauge 2: Hypertension -->
+            <a class="group relative flex flex-col items-center justify-between gap-4 rounded-xl bg-surface-light dark:bg-surface-dark p-6 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] border border-transparent hover:border-risk-medium/50 hover:shadow-lg transition-all cursor-pointer"
+                href="#modal-hypertension">
+                <div class="w-full flex justify-between items-start">
+                    <h3 class="text-lg font-bold text-[#111318] dark:text-white">HEART RISK</h3>
+                    <span
+                        class="material-symbols-outlined text-gray-400 group-hover:text-primary transition-colors">show_chart</span>
+                </div>
+                <div class="relative size-40 flex items-center justify-center">
+                    <svg class="size-full -rotate-90 transform" viewbox="0 0 100 100">
+                        <circle class="dark:stroke-gray-700" cx="50" cy="50" fill="none" r="40" stroke="#e5e7eb"
+                            stroke-width="8"></circle>
+                        <!-- 67% -> Offset = 251.2 * (1 - 0.67) = 82.9 -->
+                        <circle id="sddGaugeHeartCircle" class="text-risk-medium transition-all duration-1000 ease-out group-hover:stroke-[10]"
+                            cx="50" cy="50" fill="none" r="40" stroke="currentColor" stroke-dasharray="251.2"
+                            stroke-dashoffset="82.9" stroke-linecap="round" stroke-width="8"></circle>
+                    </svg>
+                    <div class="absolute flex flex-col items-center">
+                        <span id="sddGaugeHeartPct" class="text-3xl font-bold text-[#111318] dark:text-white">—</span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center gap-1">
+                    <span id="sddGaugeHeartBand"
+                        class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-3 py-1 text-sm font-bold text-slate-700 dark:text-slate-200">
+                        —
+                    </span>
+                    <span
+                        class="text-xs text-[#616e89] dark:text-[#a0aec0] group-hover:text-primary mt-2 flex items-center gap-1">
+                        View Details <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </span>
+                </div>
+            </a>
+            <!-- Gauge 3: Cardiac -->
+            <a class="group relative flex flex-col items-center justify-between gap-4 rounded-xl bg-surface-light dark:bg-surface-dark p-6 shadow-[0_2px_12px_-4px_rgba(0,0,0,0.08)] border border-transparent hover:border-risk-high/50 hover:shadow-lg transition-all cursor-pointer"
+                href="#modal-cardiac">
+                <div class="w-full flex justify-between items-start">
+                    <h3 class="text-lg font-bold text-[#111318] dark:text-white">LIVER RISK</h3>
+                    <span
+                        class="material-symbols-outlined text-gray-400 group-hover:text-primary transition-colors">show_chart</span>
+                </div>
+                <div class="relative size-40 flex items-center justify-center">
+                    <svg class="size-full -rotate-90 transform" viewbox="0 0 100 100">
+                        <circle class="dark:stroke-gray-700" cx="50" cy="50" fill="none" r="40" stroke="#e5e7eb"
+                            stroke-width="8"></circle>
+                        <!-- 78% -> Offset = 251.2 * (1 - 0.78) = 55.2 -->
+                        <circle id="sddGaugeLiverCircle" class="text-risk-high transition-all duration-1000 ease-out group-hover:stroke-[10]"
+                            cx="50" cy="50" fill="none" r="40" stroke="currentColor" stroke-dasharray="251.2"
+                            stroke-dashoffset="55.2" stroke-linecap="round" stroke-width="8"></circle>
+                    </svg>
+                    <div class="absolute flex flex-col items-center">
+                        <span id="sddGaugeLiverPct" class="text-3xl font-bold text-[#111318] dark:text-white">—</span>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center gap-1">
+                    <span id="sddGaugeLiverBand"
+                        class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-800 px-3 py-1 text-sm font-bold text-slate-700 dark:text-slate-200">
+                        —
+                    </span>
+                    <span
+                        class="text-xs text-[#616e89] dark:text-[#a0aec0] group-hover:text-primary mt-2 flex items-center gap-1">
+                        View Details <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </span>
+                </div>
+            </a>
+        </section>
+        <!-- AI Insight Banner -->
+        <div
+            class="flex items-stretch justify-between gap-6 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-6 border border-blue-100 dark:border-blue-900">
+            <div class="flex flex-col justify-center gap-3 flex-[2]">
+                <div class="flex items-center gap-2 text-primary font-bold">
+                    <span class="material-symbols-outlined animate-pulse">auto_awesome</span>
+                    <span class="uppercase tracking-wider text-xs">AI Predictive Insight</span>
+                </div>
+                <div>
+                    <p id="sddInsightTitle" class="text-[#111318] dark:text-white text-xl md:text-2xl font-bold leading-tight mb-2">Latest Risk Insight</p>
+                    <p id="sddInsightBody" class="text-[#616e89] dark:text-gray-300 text-base md:text-lg font-normal leading-relaxed">
+                        Loading insight from your latest saved analysis…
+                    </p>
+                </div>
+                <div class="mt-2">
+                    <button class="text-sm font-bold text-primary hover:underline decoration-2 underline-offset-4">View
+                        AI Model Analysis →</button>
+                </div>
+            </div>
+            <!-- Illustration / Abstract Graphic -->
+            <div class="hidden md:block w-48 h-full min-h-[140px] rounded-lg bg-cover bg-center shadow-inner opacity-90"
+                data-alt="Abstract data visualization of health metrics glowing blue"
+                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBMi6DJ0lK0pUIStLqeW_0HpQVQEowdb6GUP5GUYYpogxkDn3x2ETwUNRJTSdh8WnXNT5vYXqD3muUyJRa4xcq3C2InLtu9saHqe_lx56oXtf6dcRDMkU9fioiUCNLtPvOJolByIngUElnR6iwejTjqFd6CfMu77AEhqfnctuRx8zLPDtEIipCTjIRPM6f3wZqoLBiEP6ZKcGQW8YHGtMjwTUR9CjAHAI2PRS5vzXPlXxZ5hprmyRhsmEJbkMorq7djnqt8tHa6vtTo");'>
+            </div>
+        </div>
+        <!-- Recent Alerts Section -->
+        <section class="flex flex-col gap-4">
+            <div class="flex items-center justify-between border-b border-[#f0f1f4] dark:border-gray-700 pb-2">
+                <h2 class="text-[#111318] dark:text-white text-xl font-bold">Recent Alerts</h2>
+                <button class="text-sm text-primary font-medium hover:text-blue-700">View All History</button>
+            </div>
+            <div class="grid gap-3">
+                <!-- Alert Item 1 -->
+                <div
+                    class="flex items-start gap-4 p-4 rounded-lg bg-surface-light dark:bg-surface-dark border border-l-4 border-[#f0f1f4] dark:border-gray-700 border-l-risk-high">
+                    <div class="p-2 rounded-full bg-red-50 dark:bg-red-900/20 text-risk-high">
+                        <span class="material-symbols-outlined">ecg_heart</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-bold text-[#111318] dark:text-white">Irregular Heart Rhythm Detected</h4>
+                            <span class="text-xs text-gray-500 whitespace-nowrap">2 hours ago</span>
+                        </div>
+                        <p class="text-sm text-[#616e89] dark:text-gray-400 mt-1">Sustained elevated heart rate (110bpm)
+                            during resting period.</p>
+                    </div>
+                </div>
+                <!-- Alert Item 2 -->
+                <div
+                    class="flex items-start gap-4 p-4 rounded-lg bg-surface-light dark:bg-surface-dark border border-l-4 border-[#f0f1f4] dark:border-gray-700 border-l-risk-medium">
+                    <div class="p-2 rounded-full bg-orange-50 dark:bg-orange-900/20 text-risk-medium">
+                        <span class="material-symbols-outlined">blood_pressure</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-bold text-[#111318] dark:text-white">Blood Pressure Spike</h4>
+                            <span class="text-xs text-gray-500 whitespace-nowrap">Yesterday, 4:30 PM</span>
+                        </div>
+                        <p class="text-sm text-[#616e89] dark:text-gray-400 mt-1">Systolic reading exceeded 145mmHg for
+                            consecutive checks.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-[#e5e7eb] dark:border-[#2d3748] bg-surface-light dark:bg-surface-dark py-8">
+        <div class="max-w-[1200px] mx-auto px-6 text-center text-sm text-[#616e89] dark:text-[#a0aec0]">
+            <p>© 2023 Health AI Systems. All medical data is encrypted and HIPAA compliant.</p>
+        </div>
+    </footer>
+    <!-- MODALS (CSS-ONLY using :target) -->
+    <!-- Modal: Diabetes -->
+    <div class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+        id="modal-diabetes">
+        <a aria-label="Close modal" class="absolute inset-0 cursor-default" href="#"></a>
+        <div
+            class="relative w-full max-w-md bg-white dark:bg-[#1a202c] rounded-xl shadow-2xl overflow-hidden flex flex-col animate-[fadeIn_0.3s_ease-out]">
+            <div
+                class="p-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
+                <h3 class="font-bold text-lg dark:text-white">Diabetes Risk Trend</h3>
+                <a class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 transition-colors"
+                    href="#">
+                    <span class="material-symbols-outlined">close</span>
+                </a>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-500 mb-4">Risk fluctuation over the last 6 months.</p>
+                <!-- Mock Chart Area -->
+                <div
+                    class="h-40 w-full bg-gradient-to-b from-yellow-50 to-transparent rounded-lg border border-yellow-100 relative overflow-hidden flex items-end px-2 pb-0">
+                    <!-- Sparkline SVG -->
+                    <svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 100 50">
+                        <!-- Grid lines -->
+                        <line stroke="#f0f0f0" stroke-width="0.5" x1="0" x2="100" y1="10" y2="10"></line>
+                        <line stroke="#f0f0f0" stroke-width="0.5" x1="0" x2="100" y1="25" y2="25"></line>
+                        <line stroke="#f0f0f0" stroke-width="0.5" x1="0" x2="100" y1="40" y2="40"></line>
+                        <!-- Line -->
+                        <polyline fill="none" points="0,40 20,38 40,30 60,35 80,25 100,20" stroke="#eab308"
+                            stroke-width="2" vector-effect="non-scaling-stroke"></polyline>
+                        <!-- Area -->
+                        <polygon fill="#eab308" fill-opacity="0.1"
+                            points="0,50 0,40 20,38 40,30 60,35 80,25 100,20 100,50"></polygon>
+                        <!-- Dots -->
+                        <circle class="fill-yellow-500" cx="20" cy="38" r="1.5"></circle>
+                        <circle class="fill-yellow-500" cx="60" cy="35" r="1.5"></circle>
+                        <circle class="fill-yellow-600 stroke-white stroke-1" cx="100" cy="20" r="2"></circle>
+                    </svg>
+                </div>
+                <div class="mt-4 flex justify-between text-xs text-gray-400">
+                    <span>6 Months Ago</span>
+                    <span>Today</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal: Hypertension -->
+    <div class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+        id="modal-hypertension">
+        <a aria-label="Close modal" class="absolute inset-0 cursor-default" href="#"></a>
+        <div
+            class="relative w-full max-w-md bg-white dark:bg-[#1a202c] rounded-xl shadow-2xl overflow-hidden flex flex-col">
+            <div
+                class="p-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
+                <h3 class="font-bold text-lg dark:text-white">Hypertension Risk Trend</h3>
+                <a class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 transition-colors"
+                    href="#">
+                    <span class="material-symbols-outlined">close</span>
+                </a>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-500 mb-4">Steep increase observed in Q3.</p>
+                <div
+                    class="h-40 w-full bg-gradient-to-b from-orange-50 to-transparent rounded-lg border border-orange-100 relative overflow-hidden flex items-end px-2 pb-0">
+                    <svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 100 50">
+                        <polyline fill="none" points="0,35 20,32 40,25 60,15 80,10 100,8" stroke="#f97316"
+                            stroke-width="2" vector-effect="non-scaling-stroke"></polyline>
+                        <polygon fill="#f97316" fill-opacity="0.1"
+                            points="0,50 0,35 20,32 40,25 60,15 80,10 100,8 100,50"></polygon>
+                        <circle class="fill-orange-600 stroke-white stroke-1" cx="100" cy="8" r="2"></circle>
+                    </svg>
+                </div>
+                <div class="mt-4 flex justify-between text-xs text-gray-400">
+                    <span>6 Months Ago</span>
+                    <span>Today</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal: Cardiac -->
+    <div class="modal fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
+        id="modal-cardiac">
+        <a aria-label="Close modal" class="absolute inset-0 cursor-default" href="#"></a>
+        <div
+            class="relative w-full max-w-md bg-white dark:bg-[#1a202c] rounded-xl shadow-2xl overflow-hidden flex flex-col">
+            <div
+                class="p-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-800/50">
+                <h3 class="font-bold text-lg dark:text-white">Cardiac Risk Trend</h3>
+                <a class="p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 dark:text-gray-400 transition-colors"
+                    href="#">
+                    <span class="material-symbols-outlined">close</span>
+                </a>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-500 mb-4">Critical threshold breached 2 weeks ago.</p>
+                <div
+                    class="h-40 w-full bg-gradient-to-b from-red-50 to-transparent rounded-lg border border-red-100 relative overflow-hidden flex items-end px-2 pb-0">
+                    <svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 100 50">
+                        <!-- High volatility chart -->
+                        <polyline fill="none" points="0,30 15,28 30,35 45,20 60,25 75,10 90,12 100,5" stroke="#dc2626"
+                            stroke-width="2" vector-effect="non-scaling-stroke"></polyline>
+                        <polygon fill="#dc2626" fill-opacity="0.1"
+                            points="0,50 0,30 15,28 30,35 45,20 60,25 75,10 90,12 100,5 100,50"></polygon>
+                        <circle class="fill-red-600 stroke-white stroke-1" cx="100" cy="5" r="2"></circle>
+                    </svg>
+                </div>
+                <div class="mt-4 flex justify-between text-xs text-gray-400">
+                    <span>6 Months Ago</span>
+                    <span>Today</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="env.js"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script src="sdd-portal.js"></script>
+<script src="dashboard1-app.js"></script>
+
+</html>
